@@ -1,6 +1,6 @@
 import argparse
 import os
-from .redactor import redact_pdf
+from src.redactor import redact_pdf
 
 def main():
     parser = argparse.ArgumentParser(description="Redact sensitive information from PDF files.")

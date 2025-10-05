@@ -37,32 +37,22 @@ The tool is run from the command line.
 
 ### Example
 
-1.  **Create a rules file.**
-    Create a file named `rules.txt` and add your regular expression patterns. Each pattern should be on a new line. For example, to redact phone numbers and email addresses:
-    ```
-    \d{3}-\d{3}-\d{4}
-    [\w\.-]+@[\w\.-]+\.\w+
-    ```
+This repository includes sample files in the `examples/` directory to help you get started.
 
-2.  **Prepare your input files.**
-    Place the PDF files you want to redact into a directory (e.g., `input_pdfs/`).
+*   `examples/input/sample.pdf`: A sample PDF containing sensitive information like phone numbers and email addresses.
+*   `examples/rules.txt`: A sample rules file with patterns to redact the information found in `sample.pdf`.
 
-3.  **Create an output directory.**
-    This is where the redacted PDFs will be saved.
+To run the tool with the sample files:
+
+1.  **Create an output directory for the redacted files:**
     ```bash
     mkdir output_pdfs
     ```
 
-4.  **Run the redaction tool.**
+2.  **Run the redaction tool:**
+    This command will process `sample.pdf` using the provided rules and save the redacted version in the `output_pdfs` directory.
+    ```bash
+    python3 redactor_cli.py -i examples/input/sample.pdf -o output_pdfs/ -r examples/rules.txt
+    ```
 
-    *   **To process a single file:**
-        ```bash
-        python3 -m src.cli -i input_pdfs/document1.pdf -o output_pdfs/ -r rules.txt
-        ```
-
-    *   **To process all PDFs in a directory:**
-        ```bash
-        python3 -m src.cli -i input_pdfs/ -o output_pdfs/ -r rules.txt
-        ```
-
-After the script finishes, the `output_pdfs` directory will contain the redacted versions of your PDF files.
+After the script finishes, a redacted version of `sample.pdf` will be available in the `output_pdfs` directory. You can adapt this command to use your own input files and rules.

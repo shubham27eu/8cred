@@ -3,10 +3,7 @@ import os
 import fitz
 import sys
 
-# Add the project root to the Python path to allow for absolute imports
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, project_root)
-
+# No longer modifying sys.path
 from src.redactor import redact_pdf
 from tests.create_test_pdf import create_sample_pdf
 
@@ -14,16 +11,18 @@ class TestRedactor(unittest.TestCase):
 
     def setUp(self):
         """Set up for the test."""
+        # Ensure the tests directory exists for creating test files
+        if not os.path.exists("tests"):
+            os.makedirs("tests")
+
         self.sample_pdf_path = "tests/sample.pdf"
         self.redacted_pdf_path = "tests/redacted_sample.pdf"
         self.rules_path = "tests/rules.txt"
 
         # Create a sample PDF for testing
-        if not os.path.exists("tests"):
-            os.makedirs("tests")
         create_sample_pdf(self.sample_pdf_path)
 
-        # Create a rules file with normal strings
+        # Create a rules file
         with open(self.rules_path, "w") as f:
             f.write("\\d{3}-\\d{3}-\\d{4}\n")
             f.write("[\\w\\.-]+@[\\w\\.-]+\\.\\w+\n")
@@ -47,6 +46,7 @@ class TestRedactor(unittest.TestCase):
         redact_pdf(self.sample_pdf_path, self.redacted_pdf_path, patterns)
 
         # Verify the redaction
+        self.assertTrue(os.path.exists(self.redacted_pdf_path))
         doc = fitz.open(self.redacted_pdf_path)
         redacted_text = ""
         for page in doc:
@@ -64,4 +64,5 @@ class TestRedactor(unittest.TestCase):
         self.assertIn("This is some other text.", redacted_text)
 
 if __name__ == "__main__":
+    # To run these tests, execute `python3 -m unittest discover tests` from the project root.
     unittest.main()
