@@ -27,9 +27,18 @@ def main():
     if not os.path.exists(args.output):
         os.makedirs(args.output)
 
-    # Load redaction patterns from the rules file
+    # Load redaction rules from the YAML file
     with open(args.rules, "r") as f:
-        patterns = [line.strip() for line in f if line.strip()]
+        try:
+            import yaml
+            rules = yaml.safe_load(f).get("rules", [])
+        except yaml.YAMLError as e:
+            print(f"Error parsing YAML rule file: {e}")
+            return
+
+    # Separate patterns and semantic rules for processing
+    patterns = [rule["pattern"] for rule in rules if rule.get("type") == "regex" and "pattern" in rule]
+    semantic_rules = [rule for rule in rules if rule.get("type") == "semantic" and "category" in rule]
 
     # Process input files
     input_paths = []
@@ -49,7 +58,7 @@ def main():
         base_name = os.path.basename(input_path)
         output_path = os.path.join(args.output, base_name)
         print(f"Redacting {input_path} -> {output_path}")
-        redact_pdf(input_path, output_path, patterns)
+        redact_pdf(input_path, output_path, patterns, semantic_rules)
 
     print("Redaction complete.")
 

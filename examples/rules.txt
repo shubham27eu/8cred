@@ -1,8 +1,0 @@
-# This is a sample rules file for the PDF Redaction Tool.
-# Each line should contain a single regular expression pattern.
-
-# Example: U.S. Phone Numbers
-\d{3}-\d{3}-\d{4}
-
-# Example: Email Addresses
-[\w\.-]+@[\w\.-]+\.\w+
