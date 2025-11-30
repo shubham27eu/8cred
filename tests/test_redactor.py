@@ -43,7 +43,7 @@ class TestRedactor(unittest.TestCase):
             patterns = [line.strip() for line in f if line.strip()]
 
         # Redact the PDF
-        redact_pdf(self.sample_pdf_path, self.redacted_pdf_path, patterns)
+        redact_pdf(self.sample_pdf_path, self.redacted_pdf_path, patterns, [])
 
         # Verify the redaction
         self.assertTrue(os.path.exists(self.redacted_pdf_path))

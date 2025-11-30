@@ -1,9 +1,10 @@
 import fitz
 import re
+from .semantic_redactor import redact_entities
 
-def redact_pdf(input_path: str, output_path: str, patterns: list[str]):
+def redact_pdf(input_path: str, output_path: str, patterns: list[str], semantic_rules: list[dict]):
     """
-    Redacts a PDF file by finding words that match given regex patterns.
+    Redacts a PDF file by finding words that match given regex patterns or semantic rules.
     Note: This approach works best for sensitive information that is a single "word"
     (e.g., email, phone number) and does not span across multiple words.
     """
@@ -13,6 +14,10 @@ def redact_pdf(input_path: str, output_path: str, patterns: list[str]):
     compiled_patterns = [re.compile(p) for p in patterns]
 
     for page in doc:
+        # Perform semantic redaction first
+        if semantic_rules:
+            redact_entities(page, semantic_rules)
+
         # Get all words on the page with their bounding boxes
         words = page.get_text("words")
 
