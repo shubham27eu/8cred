@@ -21,7 +21,7 @@ This is a command-line tool for automatically redacting sensitive information fr
 2.  **Install the required dependencies:**
     It is recommended to use a virtual environment.
     ```bash
-    python3 -m venv venv
+    python3.11 -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
     ```
